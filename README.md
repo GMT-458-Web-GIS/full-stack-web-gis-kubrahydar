@@ -186,5 +186,4 @@ The project is also maintained in a GitHub repository with the required commit h
 This project successfully implements a **Full Stack Web GIS backend system** that satisfies all selected requirements of the Web GIS Final Assignment.
 
 The system demonstrates secure authentication, role-based authorization, spatial data management, performance optimization, and clean backend architecture.
-söyle knk, kapatıyoruz 💪
 ```
