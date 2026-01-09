@@ -21,7 +21,6 @@ The system is developed using **Node.js**, **Express**, and **PostgreSQL/PostGIS
 
 The project follows a clear **client–server separation**, with all backend logic organized under a modular **Express.js** architecture.
 
-```text
 full-stack-web-gis/
 │
 ├── server/                         # Node.js + Express backend
