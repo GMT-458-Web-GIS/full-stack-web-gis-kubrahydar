@@ -1,28 +1,48 @@
-📁 Project Structure
-The project follows a clear client–server separation, with all backend logic organized under a modular Express.js architecture.
+
+
+````md
+# 🌍 Full Stack Web GIS – Final Project
+
+## 📚 Course Information
+**Course:** GMT 458 – Web GIS  
+**Assignment:** Final Assignment – Full Stack Web GIS  
+**Submission Format:** `webgis-final.zip`
+
+This project is developed in accordance with the requirements specified in the Web GIS Final Assignment.
+
+## 🧭 Project Overview
+
+This project implements a **Full Stack Web GIS backend application** that provides authenticated and role-based access to spatial and non-spatial resources through a RESTful API.
+
+The system is developed using **Node.js**, **Express**, and **PostgreSQL/PostGIS**, with a strong focus on backend architecture, spatial data management, performance optimization, and API design.
+
+
+## 📁 Project Structure
+
+The project follows a clear **client–server separation**, with all backend logic organized under a modular **Express.js** architecture.
+
+```text
 full-stack-web-gis/
 │
 ├── server/                         # Node.js + Express backend
-│   │
 │   ├── src/
-│   │   │
 │   │   ├── config/                 # Environment variables & DB configuration
-│   │   │   ├── db.js               # PostgreSQL / PostGIS connection pool
+│   │   │   └── db.js               # PostgreSQL / PostGIS connection pool
 │   │   │
 │   │   ├── middleware/             # Global middleware layer
 │   │   │   ├── auth.js             # JWT authentication (token verification)
-│   │   │   ├── role.js             # Role-based access control (RBAC)
+│   │   │   └── role.js             # Role-based access control (RBAC)
 │   │   │
 │   │   ├── routes/                 # API route definitions
 │   │   │   ├── points.js           # Spatial resource (Point layer CRUD)
-│   │   │   ├── scores.js           # Non-spatial resource CRUD
+│   │   │   └── scores.js           # Non-spatial resource CRUD
 │   │   │
 │   │   ├── controllers/            # Request handling logic
 │   │   │   ├── pointsController.js # Create / Read / Update / Delete points
-│   │   │   ├── scoresController.js # CRUD logic for scores
+│   │   │   └── scoresController.js # CRUD logic for scores
 │   │   │
 │   │   ├── utils/                  # Helper utilities
-│   │   │   ├── geo.js              # Geometry creation (GeoJSON / PostGIS)
+│   │   │   └── geo.js              # Geometry creation (GeoJSON / PostGIS)
 │   │   │
 │   │   └── index.js                # Application entry point
 │   │
@@ -30,108 +50,142 @@ full-stack-web-gis/
 │
 ├── sql/                            # Database scripts
 │   ├── schema.sql                  # Table definitions (users, points, scores)
-│   ├── indexes.sql                 # Spatial index (GiST) definitions
+│   └── indexes.sql                 # Spatial index (GiST) definitions
 │
 ├── README.md                       # Project documentation
 └── webgis-final.zip                # Final submission archive
-________________________________________
-🧩 Backend Architecture Overview
-The backend is built using Node.js and Express and follows a layered architecture:
-•	Routes define the API endpoints.
-•	Controllers implement business logic.
-•	Middleware enforces authentication and authorization.
-•	Database layer manages spatial and non-spatial data using PostgreSQL/PostGIS.
-This structure improves maintainability, scalability, and clarity.
-________________________________________
-🔐 Authentication & Authorization Implementation
-Where it is implemented
-•	JWT verification:
-server/src/middleware/auth.js
-•	Role-based access control:
-server/src/middleware/role.js
-How it works
-•	Users authenticate via /demo-login.
-•	Passwords are securely stored using bcrypt hashing.
-•	On successful login, a JWT token is generated.
-•	The token is required for all protected endpoints.
-•	User roles (admin, player, viewer) are validated via middleware before route execution.
+````
 
-👥 Managing Different User Types
-User roles and access rules are enforced at the backend level.
-Where roles are enforced
-•	Middleware layer (role.js)
-•	Route-level protection (routes/points.js, routes/scores.js)
-Role behavior
-•	Admin: Full system access
-•	Player: Can create and manage own spatial data
-•	Viewer: Read-only access
-Ownership is tracked using an owner_id field stored with each resource.
+## 🧩 Backend Architecture Overview
 
-📍 Spatial Data Management (CRUD Operations)
-Where spatial logic is handled
-•	Routes: server/src/routes/points.js
-•	Controller: server/src/controllers/pointsController.js
-•	Geometry utilities: server/src/utils/geo.js
-How it is implemented
-•	Spatial data is stored as PostGIS geometry (Point, SRID 4326).
-•	CRUD operations are exposed via RESTful endpoints.
-•	Filtering is supported using query parameters (e.g. bounding box, ownership).
+The backend is built using **Node.js and Express** and follows a layered architecture:
 
-🧮 Non-Spatial Resource (Scores)
-The project also includes a non-spatial resource to meet API development requirements.
-Where it is implemented
-•	Routes: server/src/routes/scores.js
-•	Controller: server/src/controllers/scoresController.js
-Purpose
-•	Demonstrates handling of attribute-based data.
-•	Enforces ownership and role-based restrictions.
-•	Complements the spatial API with non-spatial logic.
+* 🔀 **Routes** define the API endpoints
+* 🧠 **Controllers** implement business logic
+* 🛡️ **Middleware** enforces authentication and authorization
+* 🗄️ **Database layer** manages spatial and non-spatial data using PostgreSQL/PostGIS
 
-⚡ Performance Monitoring & Spatial Indexing
-Where performance optimization is defined
-•	SQL scripts: sql/indexes.sql
-How performance was evaluated
-•	Spatial queries were executed with and without a GiST spatial index.
-•	Execution plans were analyzed using EXPLAIN ANALYZE.
-•	Indexed queries showed significantly improved performance compared to sequential scans.
+This structure improves **maintainability, scalability, and clarity**.
 
-🧪 API Testing
-All API endpoints were tested using Postman:
-•	Authentication flow
-•	JWT-protected requests
-•	Role-based access control
-•	Full CRUD operations for both resources
-This validates the correctness and robustness of the backend API.
 
-📦 Submission Format
+## 🔐 Authentication
+
+Authentication is implemented using **JWT (JSON Web Token)** and **bcrypt**.
+
+* Passwords are securely stored using bcrypt hashing.
+* Users authenticate via a login endpoint.
+* A JWT token is issued upon successful authentication.
+* Protected endpoints require a valid Bearer token.
+* Token verification is handled at the middleware level.
+
+
+## 👥 Managing Different User Types
+
+The system implements **Role-Based Access Control (RBAC)** with three distinct user roles:
+
+* 🛡️ **Admin**
+
+  * Full access to all resources
+  * Can perform all CRUD operations
+
+* 🎮 **Player**
+
+  * Can create, update, and delete their own spatial data
+  * Ownership rules are enforced
+
+* 👀 **Viewer**
+
+  * Read-only access
+  * Can only access GET endpoints
+
+Ownership is tracked using an `owner_id` field and enforced during update and delete operations.
+
+
+## 📍 CRUD Operations on Spatial Data
+
+The system supports **full CRUD operations** on a geographical **Point layer**.
+
+### Spatial Layer Details
+
+* Geometry type: `Point`
+* Spatial reference system: `SRID 4326`
+* Stored using PostGIS geometry types
+
+### Supported Operations
+
+* **GET /points** – Retrieve spatial features
+* **POST /points** – Create new points
+* **PUT /points/:id** – Update existing points
+* **DELETE /points/:id** – Delete points
+
+Filtering mechanisms (e.g. bounding box and ownership-based filtering) are supported.
+
+
+## 🧮 Non-Spatial Resource (Scores)
+
+In addition to spatial data, the API exposes a **non-spatial resource** (`scores`).
+
+* Full CRUD operations are supported.
+* Each score is associated with a user.
+* Role-based and ownership-based access rules are enforced.
+
+This resource demonstrates handling of attribute-based data alongside spatial data.
+
+
+## ⚡ Performance Monitoring (Spatial Indexing)
+
+To evaluate spatial query performance, a **GiST spatial index** is applied to the geometry column.
+
+### Experiment Summary
+
+* Queries were executed with and without a spatial index.
+* Execution plans were analyzed using `EXPLAIN ANALYZE`.
+* Indexed queries showed significantly reduced execution time compared to sequential scans.
+
+This experiment highlights the importance of spatial indexing in GIS applications.
+
+
+## 🧪 Performance Testing
+
+Performance testing was conducted to evaluate system behavior under load:
+
+* Load testing simulates concurrent users.
+* Response time variation is observed.
+* Results confirm backend stability and scalability.
+
+## 📦 Submission Format
+
 The project is submitted as:
-webgis-final.zip
-The archive contains:
-•	Full backend source code
-•	SQL scripts
-•	Configuration files
-•	This README document
-Additionally, the project is managed via GitHub with the required commit history.
 
-✅ Summary
-This project implements a complete Full Stack Web GIS backend with:
-•	Secure authentication
-•	Role-based authorization
-•	Spatial CRUD operations
-•	Performance optimization using spatial indexing
-•	Clean and modular backend architecture
-All requirements listed in the Web GIS Final Assignment are addressed and documented.
+**`webgis-final.zip`**
 
-✅ Implemented Assignment Components
-The following table lists only the components implemented in this project, directly aligned with the Web GIS Final Assignment requirements.
-Assignment Requirement	Weight	Status
-Managing source code on GitHub	10%	✅
-Managing different user types (RBAC)	20%	✅
-Authentication (JWT + bcrypt)	15%	✅
-CRUD operations on a geographical point layer	15%	✅
-API development (spatial + non-spatial resources)	25%	✅
-Performance monitoring (spatial indexing experiment)	25%	✅
-Performance testing (load & stress testing)	25%	✅
+This archive includes:
 
-✔ Summary
-All listed components above are fully implemented and documented in this project in accordance with the Web GIS Final Assignment description.
+* Backend source code
+* SQL scripts
+* Configuration files
+* This README document
+
+The project is also maintained in a GitHub repository with the required commit history.
+
+
+## ✅ Implemented Assignment Components
+
+| Assignment Requirement                               | Weight | Status |
+| ---------------------------------------------------- | ------ | ------ |
+| Managing source code on GitHub                       | 10%    | ✅      |
+| Managing different user types (RBAC)                 | 20%    | ✅      |
+| Authentication (JWT + bcrypt)                        | 15%    | ✅      |
+| CRUD operations on a geographical point layer        | 15%    | ✅      |
+| API development (spatial + non-spatial resources)    | 25%    | ✅      |
+| Performance monitoring (spatial indexing experiment) | 25%    | ✅      |
+| Performance testing (load & stress testing)          | 25%    | ✅      |
+
+
+## 🏁 Conclusion
+
+This project successfully implements a **Full Stack Web GIS backend system** that satisfies all selected requirements of the Web GIS Final Assignment.
+
+The system demonstrates secure authentication, role-based authorization, spatial data management, performance optimization, and clean backend architecture.
+söyle knk, kapatıyoruz 💪
+```
