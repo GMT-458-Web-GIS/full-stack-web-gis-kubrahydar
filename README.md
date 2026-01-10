@@ -1,214 +1,246 @@
 
-
 ````md
 # 🌍 Full Stack Web GIS – Final Project
 
 ## 📘 Course Information
 - **Course:** GMT 458 – Web GIS
 - **Assignment:** Final Assignment – Full Stack Web GIS
-- **Submission:** webgis-final.zip
+- **Student:** Hatice Kübra Hydar
 
 ---
 
 ## 🧩 Project Overview
-This project is a **Full Stack Web GIS application** developed using:
 
+This project is a **Full Stack Web GIS application** developed as part of the GMT 458 – Web GIS course.
+
+The application combines **spatial data processing**, **user authentication**, and **game-based interaction** in a real-world client–server architecture.
+
+### Technologies Used
 - **Backend:** Node.js (Express)
+- **Frontend:** HTML, CSS, Vanilla JavaScript
 - **Database:** PostgreSQL + PostGIS
-- **Authentication:** JWT-based authentication
-- **Architecture:** Client–Server (decoupled)
-
-The system provides authenticated access to spatial and non-spatial data through RESTful APIs.
+- **Authentication:** JWT (JSON Web Token) + bcrypt
+- **Deployment:** AWS EC2 (Ubuntu)
+- **Process Management:** PM2
 
 ---
 
 ## 🌐 Live Deployment
 
-The project is deployed using a **split architecture**.
-http://16.170.203.136:4000/
+🔗 **Live Application URL:**  
+http://16.170.203.136:4000
 
-### 🔹 Backend (AWS EC2)
-The backend API is deployed on an **AWS EC2** instance and managed using **PM2**.
+The project is deployed as a **fully integrated full-stack application** on **AWS EC2**.
+
+Both the **frontend and backend are hosted on the same EC2 instance** and served from a single origin.
 
 ---
 
-### 🔹 Frontend (GitHub Pages)
-The frontend is a static web application hosted on **GitHub Pages**.
+## ☁️ Deployment Architecture (AWS EC2)
 
-- **Repository:**  
-  https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar
+### 🔹 Backend & Frontend (Single Server Deployment)
 
-- **API Base URL:**  
-  `http://16.170.203.136:4000`
-
-
-## 📁 Project Structure
-
-The project follows a clear **client–server separation**, with all backend logic organized under a modular **Express.js** architecture.
-
-full-stack-web-gis/
-│
-├── server/                         # Node.js + Express backend
-│   ├── src/
-│   │   ├── config/                 # Environment variables & DB configuration
-│   │   │   └── db.js               # PostgreSQL / PostGIS connection pool
-│   │   │
-│   │   ├── middleware/             # Global middleware layer
-│   │   │   ├── auth.js             # JWT authentication (token verification)
-│   │   │   └── role.js             # Role-based access control (RBAC)
-│   │   │
-│   │   ├── routes/                 # API route definitions
-│   │   │   ├── points.js           # Spatial resource (Point layer CRUD)
-│   │   │   └── scores.js           # Non-spatial resource CRUD
-│   │   │
-│   │   ├── controllers/            # Request handling logic
-│   │   │   ├── pointsController.js # Create / Read / Update / Delete points
-│   │   │   └── scoresController.js # CRUD logic for scores
-│   │   │
-│   │   ├── utils/                  # Helper utilities
-│   │   │   └── geo.js              # Geometry creation (GeoJSON / PostGIS)
-│   │   │
-│   │   └── index.js                # Application entry point
-│   │
-│   └── package.json                # Backend dependencies
-│
-├── sql/                            # Database scripts
-│   ├── schema.sql                  # Table definitions (users, points, scores)
-│   └── indexes.sql                 # Spatial index (GiST) definitions
-│
-├── README.md                       # Project documentation
-└── webgis-final.zip                # Final submission archive
+- The backend is built with **Express.js**
+- The frontend is a **static web application**
+- Frontend files (`index.html`, `script.js`, `styles.css`) are served via:
+  ```js
+  app.use(express.static("public"))
 ````
 
-## 🧩 Backend Architecture Overview
+* The root route (`/`) delivers the frontend entry point
 
-The backend is built using **Node.js and Express** and follows a layered architecture:
+This deployment approach:
 
-* 🔀 **Routes** define the API endpoints
-* 🧠 **Controllers** implement business logic
-* 🛡️ **Middleware** enforces authentication and authorization
-* 🗄️ **Database layer** manages spatial and non-spatial data using PostgreSQL/PostGIS
+* Eliminates CORS issues
+* Simplifies configuration
+* Reflects a production-style setup
 
-This structure improves **maintainability, scalability, and clarity**.
+The backend process is managed using **PM2** to ensure reliability and uptime.
 
+---
 
-## 🔐 Authentication
+## 🔐 Authentication & Authorization
 
-Authentication is implemented using **JWT (JSON Web Token)** and **bcrypt**.
+Authentication is implemented using **JWT** and **bcrypt**:
 
-* Passwords are securely stored using bcrypt hashing.
-* Users authenticate via a login endpoint.
-* A JWT token is issued upon successful authentication.
-* Protected endpoints require a valid Bearer token.
-* Token verification is handled at the middleware level.
+* Passwords are securely hashed with bcrypt
+* Users authenticate via login/signup endpoints
+* A JWT token is issued upon successful login
+* Protected endpoints require a valid Bearer token
+* Token verification is handled via middleware
 
+---
 
-## 👥 Managing Different User Types
+## 👥 Role-Based Access Control (RBAC)
 
-The system implements **Role-Based Access Control (RBAC)** with three distinct user roles:
+The system implements **Role-Based Access Control** with three user roles:
 
-* 🛡️ **Admin**
+### 🛡️ Admin
 
-  * Full access to all resources
-  * Can perform all CRUD operations
+* Full access to all resources
+* Can perform all CRUD operations
 
-* 🎮 **Player**
+### 🎮 Player
 
-  * Can create, update, and delete their own spatial data
-  * Ownership rules are enforced
+* Can create, update, and delete their own spatial data
+* Ownership rules are enforced
 
-* 👀 **Viewer**
+### 👀 Viewer
 
-  * Read-only access
-  * Can only access GET endpoints
+* Read-only access
+* Can only access GET endpoints
 
 Ownership is tracked using an `owner_id` field and enforced during update and delete operations.
 
+---
 
-## 📍 CRUD Operations on Spatial Data
+## 📍 Spatial Data Management (PostGIS)
 
-The system supports **full CRUD operations** on a geographical **Point layer**.
+The application supports full **CRUD operations** on a spatial **Point layer**.
 
 ### Spatial Layer Details
 
-* Geometry type: `Point`
-* Spatial reference system: `SRID 4326`
+* Geometry type: **Point**
+* SRID: **4326**
 * Stored using PostGIS geometry types
 
-### Supported Operations
+### Supported Endpoints
 
-* **GET /points** – Retrieve spatial features
-* **POST /points** – Create new points
-* **PUT /points/:id** – Update existing points
-* **DELETE /points/:id** – Delete points
+* `GET /points` – Retrieve spatial features
+* `POST /points` – Create new points
+* `PUT /points/:id` – Update existing points
+* `DELETE /points/:id` – Delete points
 
-Filtering mechanisms (e.g. bounding box and ownership-based filtering) are supported.
+Advanced filtering is supported:
 
+* Bounding box queries
+* Ownership-based filtering
 
-## 🧮 Non-Spatial Resource (Scores)
+---
 
-In addition to spatial data, the API exposes a **non-spatial resource** (`scores`).
+## 🧮 Non-Spatial Resource – Scores
 
-* Full CRUD operations are supported.
-* Each score is associated with a user.
-* Role-based and ownership-based access rules are enforced.
+In addition to spatial data, the API exposes a **non-spatial resource** (`scores`):
 
-This resource demonstrates handling of attribute-based data alongside spatial data.
+* Full CRUD operations
+* Each score is associated with a user
+* Role-based and ownership-based access control enforced
 
+This demonstrates handling **attribute-based data** alongside spatial data.
+
+---
 
 ## ⚡ Performance Monitoring (Spatial Indexing)
 
-To evaluate spatial query performance, a **GiST spatial index** is applied to the geometry column.
+A **GiST spatial index** is applied to the geometry column to improve query performance.
 
 ### Experiment Summary
 
-* Queries were executed with and without a spatial index.
-* Execution plans were analyzed using `EXPLAIN ANALYZE`.
-* Indexed queries showed significantly reduced execution time compared to sequential scans.
+* Queries executed with and without spatial indexing
+* Execution plans analyzed using `EXPLAIN ANALYZE`
+* Indexed queries show significantly reduced execution time
 
 This experiment highlights the importance of spatial indexing in GIS applications.
 
+---
 
 ## 🧪 Performance Testing
 
 Performance testing was conducted to evaluate system behavior under load:
 
-* Load testing simulates concurrent users.
-* Response time variation is observed.
-* Results confirm backend stability and scalability.
+* Concurrent user simulation
+* Response time monitoring
+* Stability and scalability evaluation
+
+Results indicate that the backend remains stable under increased load.
+
+---
+
+## 📁 Project Structure
+
+```
+full-stack-web-gis/
+│
+├── backend/                      # Node.js + Express backend
+│   ├── src/
+│   │   ├── middleware/           # Auth & RBAC middleware
+│   │   ├── routes/               # API routes
+│   │   ├── db.js                 # PostgreSQL/PostGIS connection
+│   │   └── index.js              # Application entry point
+│   │
+│   ├── public/                   # Frontend (served by Express)
+│   │   ├── index.html
+│   │   ├── script.js
+│   │   └── styles.css
+│   │
+│   └── package.json
+│
+├── sql/                          # Database scripts
+│   ├── schema.sql
+│   └── indexes.sql
+│
+├── README.md
+└── webgis-final.zip
+```
+
+---
 
 ## 📦 Submission Format
 
 The project is submitted as:
 
-**`webgis-final.zip`**
+* **webgis-final.zip**
 
-This archive includes:
+The archive includes:
 
 * Backend source code
+* Frontend files
 * SQL scripts
 * Configuration files
 * This README document
 
-The project is also maintained in a GitHub repository with the required commit history.
+The source code is also maintained in a GitHub repository for version control.
 
+---
+
+## 🔗 Source Code Repository
+
+* **GitHub Repository:**
+  [https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar](https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar)
+
+The repository is used for **source code management**.
+The live application is deployed on **AWS EC2**.
+
+---
 
 ## ✅ Implemented Assignment Components
 
-| Assignment Requirement                               | Weight | Status |
-| ---------------------------------------------------- | ------ | ------ |
-| Managing source code on GitHub                       | 10%    | ✅      |
-| Managing different user types (RBAC)                 | 20%    | ✅      |
-| Authentication (JWT + bcrypt)                        | 15%    | ✅      |
-| CRUD operations on a geographical point layer        | 15%    | ✅      |
-| API development (spatial + non-spatial resources)    | 25%    | ✅      |
-| Performance monitoring (spatial indexing experiment) | 25%    | ✅      |
-| Performance testing (load & stress testing)          | 25%    | ✅      |
+| Requirement                               | Weight | Status |
+| ----------------------------------------- | ------ | ------ |
+| Managing source code on GitHub            | 10%    | ✅      |
+| Managing different user types (RBAC)      | 20%    | ✅      |
+| Authentication (JWT + bcrypt)             | 15%    | ✅      |
+| CRUD operations on spatial data           | 15%    | ✅      |
+| API development (spatial + non-spatial)   | 25%    | ✅      |
+| Performance monitoring (spatial indexing) | 25%    | ✅      |
+| Performance testing                       | 25%    | ✅      |
 
+---
 
 ## 🏁 Conclusion
 
-This project successfully implements a **Full Stack Web GIS backend system** that satisfies all selected requirements of the Web GIS Final Assignment.
+This project successfully delivers a **fully functional Full Stack Web GIS application** deployed on **AWS EC2**.
 
-The system demonstrates secure authentication, role-based authorization, spatial data management, performance optimization, and clean backend architecture.
+It demonstrates:
+
+* Secure authentication
+* Role-based authorization
+* Spatial data management with PostGIS
+* Performance optimization
+* Real-world deployment practices
+
+The system satisfies all selected requirements of the **Web GIS Final Assignment**.
+
 ```
+
+---
