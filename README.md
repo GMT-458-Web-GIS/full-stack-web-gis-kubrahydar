@@ -25,19 +25,10 @@ The system provides authenticated access to spatial and non-spatial data through
 ## 🌐 Live Deployment
 
 The project is deployed using a **split architecture**.
+http://16.170.203.136:4000/
 
 ### 🔹 Backend (AWS EC2)
 The backend API is deployed on an **AWS EC2** instance and managed using **PM2**.
-
-- **Health Check:**  
-  http://16.170.203.136:4000/health
-
-- **Authentication Endpoints:**  
-  - `POST` http://16.170.203.136:4000/api/auth/login  
-  - `POST` http://16.170.203.136:4000/api/auth/signup  
-
-> Note: Accessing `http://16.170.203.136:4000/` directly may return  
-> `Cannot GET /` — this is expected since the backend only serves API endpoints.
 
 ---
 
