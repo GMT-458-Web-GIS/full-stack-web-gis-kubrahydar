@@ -16,6 +16,40 @@ This project implements a **Full Stack Web GIS backend application** that provid
 
 The system is developed using **Node.js**, **Express**, and **PostgreSQL/PostGIS**, with a strong focus on backend architecture, spatial data management, performance optimization, and API design.
 
+🌐 Live Deployment (AWS EC2 + GitHub Pages)
+
+This project is deployed using a split (decoupled) architecture, where the backend and frontend are hosted on different platforms.
+
+✅ Backend (AWS EC2)
+
+The backend is a Node.js (Express) application deployed on an AWS EC2 instance and managed using PM2.
+A PostgreSQL database is used on the server side.
+
+Backend Health Check
+
+http://16.170.203.136:4000/health
+
+Authentication Endpoints
+
+POST http://16.170.203.136:4000/api/auth/login
+
+POST http://16.170.203.136:4000/api/auth/signup
+
+Note: Opening http://16.170.203.136:4000/ directly in the browser may return
+Cannot GET /
+This is expected behavior, as the backend only serves API endpoints. Please use /health or the API routes listed above.
+
+✅ Frontend (GitHub Pages)
+
+The frontend is a static web application (HTML / CSS / JavaScript) hosted using GitHub Pages.
+
+Frontend Repository (GitHub Pages)
+
+https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar
+
+The frontend communicates with the AWS-hosted backend via the following base URL:
+
+API Base URL: http://16.170.203.136:4000
 
 ## 📁 Project Structure
 
