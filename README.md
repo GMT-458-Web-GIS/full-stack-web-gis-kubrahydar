@@ -7,6 +7,7 @@
 - **Assignment:** Final Assignment – Full Stack Web GIS
 - **Student:** Hatice Kübra Hydar
 
+
 ---
 
 ## 🧩 Project Overview
@@ -184,33 +185,6 @@ full-stack-web-gis/
 ```
 
 ---
-
-## 📦 Submission Format
-
-The project is submitted as:
-
-* **webgis-final.zip**
-
-The archive includes:
-
-* Backend source code
-* Frontend files
-* SQL scripts
-* Configuration files
-* This README document
-
-The source code is also maintained in a GitHub repository for version control.
-
----
-
-## 🔗 Source Code Repository
-
-* **GitHub Repository:**
-  [https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar](https://github.com/GMT-458-Web-GIS/full-stack-web-gis-kubrahydar)
-
-The repository is used for **source code management**.
-The live application is deployed on **AWS EC2**.
-
 ---
 
 ## ✅ Implemented Assignment Components
